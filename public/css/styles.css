@@ -4,7 +4,7 @@ body {
     margin: 0 auto; /* Centra el contenido horizontalmente */
     padding: 20px;
     width: 80%; /* Ocupa el 80% del ancho de la página */
-    background-image: url('../public/img/fondo_login.jpg'); /* Ruta de la imagen */
+    background-image: url('../img/fondo_login.jpg'); /* Ruta de la imagen */
     background-size: cover; /* Ajusta la imagen para cubrir toda la pantalla */
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat;
