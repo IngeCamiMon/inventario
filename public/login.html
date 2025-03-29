@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Se asume que hay un CSS para mejor presentación -->
+</head>
+<body>
+    <div id="authContainer">
+        <!-- Formulario de Inicio de Sesión -->
+        <form id="loginForm">
+            <h2>Iniciar Sesión</h2>
+            <label for="loginEmail">Correo electrónico:</label>
+            <input type="email" id="loginEmail" required autocomplete="email" placeholder="Ingrese su correo">
+
+            <label for="loginPassword">Contraseña:</label>
+            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Ingrese su contraseña">
+
+            <button type="submit" id="loginBtn">Iniciar Sesión</button>
+            <p>¿No tienes cuenta? <a href="#" id="showRegister">Registrarse</a></p>
+        </form>
+
+        <!-- Formulario de Registro -->
+        <form id="registerForm" hidden>
+            <h2>Registrarse</h2>
+            <label for="registerEmail">Correo electrónico:</label>
+            <input type="email" id="registerEmail" required autocomplete="email" placeholder="Ingrese su correo">
+
+            <label for="registerPassword">Contraseña:</label>
+            <input type="password" id="registerPassword" required autocomplete="new-password" placeholder="Cree una contraseña">
+
+            <button type="submit" id="registerSubmit">Registrarse</button>
+            <p>¿Ya tienes cuenta? <a href="#" id="showLogin">Iniciar Sesión</a></p>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initAuthListeners, setupAuthStateListener } from "/js/auth.js";
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar los listeners de autenticación
+            initAuthListeners();
+            
+            // Configurar el listener de estado de autenticación
+            setupAuthStateListener();
+        });
+    </script>
+</body>
+</html>

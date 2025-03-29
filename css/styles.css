@@ -1,0 +1,252 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0 auto; /* Centra el contenido horizontalmente */
+    padding: 20px;
+    width: 80%; /* Ocupa el 80% del ancho de la página */
+    background-image: url('../public/img/fondo_login.jpg'); /* Ruta de la imagen */
+    background-size: cover; /* Ajusta la imagen para cubrir toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat;
+    box-sizing: border-box; /* Asegura que el ancho incluya bordes y relleno */
+}
+
+.container {
+    width: 100%; /* Cambia el ancho al 100% */
+    max-width: none; /* Elimina el límite de ancho */
+    margin: 0; /* Elimina márgenes */
+    padding: 20px; /* Agrega un poco de espacio interno */
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    text-align: center;
+    margin-bottom: 20px;
+    margin: auto;
+    padding: auto;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    display: block;
+    width: 30%;
+    padding: auto;
+    margin: auto;
+    margin-top: 10px;
+    background: #130ac0;
+    color: white;
+    border 2px solid black;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #555;
+}
+
+table {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin: 0; /* Elimina márgenes */
+    padding: 0; /* Elimina relleno */
+    box-sizing: border-box; /* Asegura que el ancho incluya bordes y relleno */
+    border-collapse: collapse; /* Elimina espacios entre bordes */
+    background-color: #ffffff;
+}
+
+table, th, td {
+    border: 1px solid #040000;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#loginForm {
+    background-color: white; /* Oculta el formulario de inicio de sesión por defecto */
+    width: 75%;
+    margin: auto;
+    padding: auto;
+    border-style: groove;
+    text-align: center;
+
+}
+
+#logoutBtn {
+    display: block; /* Asegúrate de que sea visible */
+    position: absolute; /* Posición absoluta para colocarlo en la esquina */
+    top: 20px; /* Ajusta la distancia desde la parte superior */
+    right: 20px; /* Ajusta la distancia desde la derecha */
+    padding: 3px 3px; /* Reduce el relleno del botón */
+    font-size: 10px; /* Reduce el tamaño del texto */
+    background: #130ac0; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: 1px solid black; /* Reduce el grosor del borde */
+    border-radius: 3px; /* Bordes redondeados más pequeños */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+}
+
+#logoutBtn:hover {
+    background: #555; /* Cambia el color al pasar el cursor */
+}
+
+#inventorySection {
+    width: 100%; /* Ocupa todo el ancho de la pantalla */
+    margin: 0; /* Elimina márgenes */
+    padding: 0; /* Elimina relleno */
+    box-sizing: border-box; /* Asegura que el ancho incluya bordes y relleno */
+}
+
+table td button {
+    display: inline-block; /* Asegura que los botones estén alineados en línea */
+    width: 45px; /* Ajusta el ancho del botón */
+    height: 30px; /* Ajusta la altura del botón */
+    padding: 0; /* Elimina el relleno interno */
+    margin: 2px; /* Agrega un pequeño margen entre botones */
+    background: #130ac0; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: 1px solid black; /* Borde del botón */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    font-size: 12px; /* Ajusta el tamaño del texto */
+    text-align: center; /* Centra el contenido del botón */
+}
+
+table td button:hover {
+    background: #555; /* Cambia el color al pasar el cursor */
+}
+
+#productForm {
+    display: flex;
+    flex-direction: column; /* Coloca los elementos uno debajo del otro */
+    gap: 10px; /* Espaciado entre los elementos */
+    width: 100%; /* Asegura que el formulario ocupe todo el ancho disponible */
+}
+
+#productForm label {
+    font-weight: bold; /* Opcional: resalta las etiquetas */
+}
+
+#productForm input {
+    width: 100%; /* Asegura que los campos ocupen todo el ancho disponible */
+    padding: 8px; /* Agrega espacio interno */
+    border: 1px solid #ddd; /* Borde ligero */
+    border-radius: 4px; /* Bordes redondeados */
+    box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+}
+
+#productForm button {
+    width: auto; /* Ajusta el ancho del botón al contenido */
+    align-self: center; /* Centra el botón en el formulario */
+    padding: 10px 20px; /* Ajusta el relleno del botón */
+    background: #130ac0; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: 1px solid black; /* Borde */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+}
+
+#productForm button:hover {
+    background: #555; /* Cambia el color al pasar el cursor */
+}
+
+/* Contenedor principal para centrar los formularios */
+#authContainer {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Estilo general para los formularios */
+form {
+    background: white; /* Fondo blanco */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 400px; /* Limita el ancho máximo */
+    display: flex;
+    flex-direction: column; /* Coloca los elementos uno debajo del otro */
+    gap: 15px; /* Espaciado entre los elementos */
+}
+
+/* Estilo para los encabezados de los formularios */
+form h2 {
+    margin: 0;
+    font-size: 24px;
+    text-align: center;
+    color: #130ac0; /* Color principal */
+}
+
+/* Estilo para las etiquetas */
+form label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Estilo para los campos de entrada */
+form input {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ddd; /* Borde ligero */
+    border-radius: 4px; /* Bordes redondeados */
+    box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+    font-size: 14px;
+}
+
+/* Estilo para los botones */
+form button {
+    width: 100%; /* Botón ocupa todo el ancho */
+    padding: 10px; /* Espaciado interno */
+    background: #130ac0; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    font-size: 16px;
+    text-align: center;
+}
+
+form button:hover {
+    background: #555; /* Cambia el color al pasar el cursor */
+}
+
+/* Estilo para los enlaces */
+form p {
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+}
+
+form a {
+    color: #130ac0;
+    text-decoration: none;
+}
+
+form a:hover {
+    text-decoration: underline;
+}
