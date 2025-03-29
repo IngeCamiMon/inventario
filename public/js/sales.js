@@ -17,6 +17,11 @@ const salesModal = document.getElementById("salesModal");
 const openSalesModalBtn = document.getElementById("openSalesModal");
 const closeSalesModalBtn = document.querySelector(".close-btn");
 const salesForm = document.getElementById("salesForm");
+const saleBarcodeInput = document.getElementById("saleBarcode");
+const saleProductNameInput = document.getElementById("saleProductName"); // Nuevo campo para mostrar el nombre
+
+// Agregar campo de usuario en la venta
+const saleUserEmail = document.getElementById("saleUserEmail");
 
 document.addEventListener("DOMContentLoaded", () => {
     onAuthStateChanged(auth, (user) => {
@@ -46,6 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
 openSalesModalBtn?.addEventListener("click", () => {
     salesModal.classList.remove("hidden");
     salesModal.style.display = "flex";
+    
+    // Mostrar el usuario autenticado en la venta
+    const user = auth.currentUser;
+    saleUserEmail.value = user ? user.email : "Desconocido";
 });
 
 // Cerrar la ventana modal
@@ -54,12 +63,30 @@ closeSalesModalBtn?.addEventListener("click", () => {
     salesModal.style.display = "none";
 });
 
+// Autocompletar el nombre del producto al ingresar código de barras
+saleBarcodeInput?.addEventListener("input", async () => {
+    const barcode = saleBarcodeInput.value.trim();
+    if (!barcode) {
+        saleProductNameInput.value = "";
+        return;
+    }
+    try {
+        const product = await databaseService.getProductByBarcode(barcode);
+        saleProductNameInput.value = product ? product.name : "No encontrado";
+    } catch (error) {
+        console.error("❌ Error al buscar el producto:", error);
+        saleProductNameInput.value = "Error";
+    }
+});
+
 // Manejar la venta
 async function handleSale(event) {
     event.preventDefault();
 
-    const barcode = document.getElementById("saleBarcode").value.trim();
+    const barcode = saleBarcodeInput.value.trim();
     const quantity = parseInt(document.getElementById("saleQuantity").value, 10);
+    const user = auth.currentUser; // Obtener usuario autenticado
+    const userEmail = user ? user.email : "Desconocido";
 
     if (!barcode || quantity <= 0) {
         alert("⚠️ Ingrese datos válidos para la venta.");
@@ -71,13 +98,6 @@ async function handleSale(event) {
         
         if (!product) {
             alert("⚠️ Producto no encontrado.");
-            return;
-        }
-
-        // Verificar si el producto tiene un nombre definido
-        if (!product.name || typeof product.name !== "string") {
-            console.error("❌ El producto no tiene un nombre definido o es incorrecto:", product);
-            alert("⚠️ Error: El producto no tiene un nombre válido en la base de datos.");
             return;
         }
 
@@ -99,6 +119,7 @@ async function handleSale(event) {
             price: product.price,
             total: product.price * quantity,
             timestamp: serverTimestamp(),
+            soldBy: userEmail // Guardar quién realizó la venta
         };
 
         await addDoc(collection(db, "sales"), saleData);
@@ -133,6 +154,7 @@ function generateReceipt(sale) {
     doc.text(`Precio unitario: $${sale.price.toFixed(2)}`, 20, 60);
     doc.text(`Total: $${sale.total.toFixed(2)}`, 20, 70);
     doc.text(`Fecha: ${new Date().toLocaleString()}`, 20, 80);
+    doc.text(`Vendido por: ${sale.soldBy}`, 20, 90); // Agregar usuario al PDF
 
     doc.save(`Recibo_${sale.barcode}.pdf`);
 }
