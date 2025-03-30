@@ -46,6 +46,7 @@ async function generateSalesReport() {
     const doc = new jsPDF();
     doc.text("Reporte de Ventas", 80, 20);
     let y = 40;
+    let totalSales = 0;
 
     try {
         const today = new Date();
@@ -71,6 +72,8 @@ async function generateSalesReport() {
             const total = data.total ? `$${data.total.toFixed(2)}` : "Total no disponible";
             const soldBy = data.soldBy || "Vendedor desconocido";
             const timestamp = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : "Fecha no disponible";
+            
+            totalSales += data.total || 0;
 
             doc.text(`Producto: ${productName}`, 20, y);
             doc.text(`Cantidad: ${quantity}`, 20, y + 10);
@@ -82,6 +85,7 @@ async function generateSalesReport() {
             y += 65;
         });
 
+        doc.text(`Total de ventas del día: $${totalSales.toFixed(2)}`, 20, y + 20);
         doc.save("Reporte_Ventas_Hoy.pdf");
     } catch (error) {
         console.error("Error generando el reporte de ventas:", error);
