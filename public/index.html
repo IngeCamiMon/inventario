@@ -18,6 +18,7 @@
         <p id="userEmail"></p>
       </section>
 
+
       <!-- Sección de Inventario -->
       <section id="inventorySection" class="hidden">
         <fieldset>
@@ -93,6 +94,12 @@
             <!-- Aquí se insertarán dinámicamente los productos -->
           </tbody>
         </table>
+
+        <div class="report-buttons">
+          <button id="generateInventoryReport">Generar Reporte de Inventario</button>
+          <button id="generateSalesReport">Generar Reporte de Ventas</button>
+        </div>
+        
       </section>
     </div>
 
@@ -145,6 +152,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script type="module" src="js/sales.js"></script>
     <script type="module" src="js/search.js"></script>
+    <script type="module" src="js/report.js"></script>
 
 
     <script type="module">

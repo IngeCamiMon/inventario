@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     line-height: 1.6;
     margin: 0 auto; /* Centra el contenido horizontalmente */
     padding: 20px;
@@ -48,7 +48,7 @@ button {
     margin-top: 10px;
     background: #130ac0;
     color: white;
-    border 2px solid black;
+    border: 2px solid black;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -98,7 +98,7 @@ th, td {
     right: 20px; /* Ajusta la distancia desde la derecha */
     padding: 3px 3px; /* Reduce el relleno del botón */
     font-size: 10px; /* Reduce el tamaño del texto */
-    background: #130ac0; /* Color de fondo */
+    background: #e70909; /* Color de fondo */
     color: white; /* Color del texto */
     border: 1px solid black; /* Reduce el grosor del borde */
     border-radius: 3px; /* Bordes redondeados más pequeños */
@@ -284,4 +284,31 @@ form a:hover {
 
 .hidden {
     display: none;
+}
+
+.report-buttons {
+    display: flex; /* Usa flexbox para alinear los botones */
+    justify-content: flex-end; /* Justifica los botones hacia la derecha */
+    gap: 10px; /* Espaciado entre los botones */
+    margin-top: 20px; /* Espaciado superior opcional */
+}
+
+.report-buttons button {
+    padding: 5px 10px; /* Reduce el tamaño del botón */
+    font-size: 12px; /* Reduce el tamaño del texto */
+    background-color: #130ac0; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: 1px solid #040000; /* Borde del botón */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+}
+
+.report-buttons button:hover {
+    background-color: #555; /* Cambia el color al pasar el cursor */
+}
+
+
+#openSalesModal{
+    background-color: #e70909;
+    color:#dddddd;
 }
