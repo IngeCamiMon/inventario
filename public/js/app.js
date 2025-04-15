@@ -10,7 +10,6 @@ import {
 import { loadProducts } from "./product.js";
 import { setupAuthStateListener } from "./auth.js";
 
-console.log("✅ app.js cargado correctamente");
 
 let editingProductId = null;
 
