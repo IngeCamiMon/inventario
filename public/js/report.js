@@ -13,7 +13,9 @@ const salesReportBtn = document.getElementById("generateSalesReport");
 async function generateInventoryReport() {
     const doc = new jsPDF();
     doc.text("Reporte de Inventario", 80, 20);
-    let y = 40;
+    let y = 40; // Posición inicial en la página
+    const pageHeight = doc.internal.pageSize.height; // Altura de la página
+    const lineHeight = 50; // Altura de cada bloque de texto
 
     try {
         const querySnapshot = await getDocs(collection(db, "products"));
@@ -26,12 +28,18 @@ async function generateInventoryReport() {
             const quantity = data.quantity ?? "Desconocido";
             const price = data.price ? `$${data.price.toFixed(2)}` : "Precio no disponible";
 
+            // Verificar si hay suficiente espacio en la página actual
+            if (y + lineHeight > pageHeight - 20) {
+                doc.addPage(); // Agregar una nueva página
+                y = 20; // Reiniciar la posición vertical
+            }
+
             doc.text(`Producto: ${productName}`, 20, y);
             doc.text(`Categoría: ${category}`, 20, y + 10);
             doc.text(`Cantidad: ${quantity}`, 20, y + 20);
             doc.text(`Precio: ${price}`, 20, y + 30);
-            doc.line(20, y + 35, 190, y + 35); 
-            y += 50;
+            doc.line(20, y + 35, 190, y + 35); // Línea separadora
+            y += lineHeight; // Incrementar la posición vertical
         });
 
         doc.save("Reporte_Inventario.pdf");
@@ -45,7 +53,9 @@ async function generateInventoryReport() {
 async function generateSalesReport() {
     const doc = new jsPDF();
     doc.text("Reporte de Ventas", 80, 20);
-    let y = 40;
+    let y = 40; // Posición inicial en la página
+    const pageHeight = doc.internal.pageSize.height; // Altura de la página
+    const lineHeight = 65; // Altura de cada bloque de texto
     let totalSales = 0;
 
     try {
@@ -60,7 +70,7 @@ async function generateSalesReport() {
             where("timestamp", ">=", today),
             where("timestamp", "<", tomorrow)
         );
-        
+
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((sale) => {
             const data = sale.data();
@@ -72,8 +82,14 @@ async function generateSalesReport() {
             const total = data.total ? `$${data.total.toFixed(2)}` : "Total no disponible";
             const soldBy = data.soldBy || "Vendedor desconocido";
             const timestamp = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : "Fecha no disponible";
-            
+
             totalSales += data.total || 0;
+
+            // Verificar si hay suficiente espacio en la página actual
+            if (y + lineHeight > pageHeight - 20) {
+                doc.addPage(); // Agregar una nueva página
+                y = 20; // Reiniciar la posición vertical
+            }
 
             doc.text(`Producto: ${productName}`, 20, y);
             doc.text(`Cantidad: ${quantity}`, 20, y + 10);
@@ -81,11 +97,17 @@ async function generateSalesReport() {
             doc.text(`Total: ${total}`, 20, y + 30);
             doc.text(`Vendido por: ${soldBy}`, 20, y + 40);
             doc.text(`Fecha: ${timestamp}`, 20, y + 50);
-            doc.line(20, y + 55, 190, y + 55);
-            y += 65;
+            doc.line(20, y + 55, 190, y + 55); // Línea separadora
+            y += lineHeight; // Incrementar la posición vertical
         });
 
+        // Agregar el total de ventas al final
+        if (y + 20 > pageHeight - 20) {
+            doc.addPage(); // Agregar una nueva página si no hay espacio
+            y = 20;
+        }
         doc.text(`Total de ventas del día: $${totalSales.toFixed(2)}`, 20, y + 20);
+
         doc.save("Reporte_Ventas_Hoy.pdf");
     } catch (error) {
         console.error("Error generando el reporte de ventas:", error);

@@ -98,7 +98,7 @@ th, td {
     right: 20px; /* Ajusta la distancia desde la derecha */
     padding: 3px 3px; /* Reduce el relleno del botón */
     font-size: 10px; /* Reduce el tamaño del texto */
-    background: #e70909; /* Color de fondo */
+    background: #0625ee; /* Color de fondo */
     color: white; /* Color del texto */
     border: 1px solid black; /* Reduce el grosor del borde */
     border-radius: 3px; /* Bordes redondeados más pequeños */
@@ -136,7 +136,7 @@ table td button:hover {
 }
 
 #productForm {
-    display: flex;
+    display: none;
     flex-direction: column; /* Coloca los elementos uno debajo del otro */
     gap: 10px; /* Espaciado entre los elementos */
     width: 100%; /* Asegura que el formulario ocupe todo el ancho disponible */
@@ -309,6 +309,14 @@ form a:hover {
 
 
 #openSalesModal{
-    background-color: #e70909;
-    color:#dddddd;
+    display:block;
+    width: 30%;
+    padding: auto;
+    margin: auto;
+    margin-top: 10px;
+    background: #c01c0a;
+    color: white;
+    border: 3px solid rgb(52, 241, 9);
+    border-radius: 4px;
+    cursor: pointer;
 }

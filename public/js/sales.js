@@ -4,7 +4,7 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp } from "https://www
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const auth = getAuth();
-const ADMIN_EMAIL = "camilo-156@hotmail.com"; // Reemplaza con el correo del usuario autorizado
+const ADMIN_EMAIL = "jalcuza_58@hotmail.com"; // Reemplaza con el correo del usuario autorizado
 
 // Verificar si jsPDF está correctamente cargado
 const jsPDF = window.jspdf?.jsPDF;
@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".edit-btn, .delete-btn").forEach(btn => {
                 btn.style.display = isAdmin ? "inline-block" : "none";
             });
+            
         }
 
         // Observar cambios en la lista de productos y actualizar permisos
