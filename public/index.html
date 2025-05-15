@@ -5,107 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema de Inventario</title>
     <link rel="stylesheet" href="css/styles.css" />
+
   </head>
   <body>
-    <div class="container">
-      <section>
+    <div class="app-container">
+      <!-- Header con título y información de usuario -->
+      <header class="header">
         <h1>Sistema de Inventario</h1>
-        <button id="logoutBtn" type="button">Cerrar Sesión</button>
-      </section>
+        <div id="userInfo" class="hidden">
+          <p id="userEmail"></p>
+        </div>
+      </header>
 
-      <!-- Información del usuario -->
-      <section id="userInfo" class="hidden">
-        <p id="userEmail"></p>
-      </section>
+      <!-- Contenido principal -->
+      <div class="main-content" id="inventorySection" class="hidden">
+        <!-- Acciones Rápidas -->
+        <section class="quick-actions">
+          <button id="openSalesModal" class="action-button action-sales">REALIZAR VENTA</button>
+        </section>
 
-      <!-- Botón para abrir la ventana de ventas -->
-      <button id="openSalesModal">Realizar Venta</button>
-
-      <!-- Sección de Inventario -->
-      <section id="inventorySection" class="hidden">
-        <fieldset>
-          <legend>Registrar Producto</legend>
-          <button id="toggleProductForm" type="button">Mostrar/Ocultar</button>
+        <!-- Sección de Registro de Productos -->
+        <section class="product-registration">
+          <div class="product-registration-header">
+            <h2>Registrar Producto</h2>
+            <button id="toggleProductForm" type="button">Mostrar/Ocultar</button>
+          </div>
+          
           <form id="productForm">
-            <label for="barcode">Código de Barras:</label>
-            <input
-              type="text"
-              id="barcode"
-              required
-              autocomplete="off"
-              placeholder="Ingrese código de barras"
-              autofocus
-            />
+            <div class="form-group">
+              <label for="barcode">Código de Barras:</label>
+              <input
+                type="text"
+                id="barcode"
+                required
+                autocomplete="off"
+                placeholder="Ingrese código de barras"
+                autofocus
+              />
+            </div>
 
-            <label for="productName">Nombre del Producto:</label>
-            <input
-              type="text"
-              id="productName"
-              required
-              autocomplete="off"
-              placeholder="Ingrese nombre"
-            />
+            <div class="form-group">
+              <label for="productName">Nombre del Producto:</label>
+              <input
+                type="text"
+                id="productName"
+                required
+                autocomplete="off"
+                placeholder="Ingrese nombre"
+              />
+            </div>
 
-            <label for="category">Categoría:</label>
-            <input
-              type="text"
-              id="category"
-              required
-              autocomplete="off"
-              placeholder="Ingrese categoría"
-            />
+            <div class="form-group">
+              <label for="category">Categoría:</label>
+              <input
+                type="text"
+                id="category"
+                required
+                autocomplete="off"
+                placeholder="Ingrese categoría"
+              />
+            </div>
 
-            <label for="quantity">Cantidad:</label>
-            <input
-              type="number"
-              id="quantity"
-              min="1"
-              required
-              autocomplete="off"
-              placeholder="Ej. 10"
-            />
+            <div class="form-group">
+              <label for="quantity">Cantidad:</label>
+              <input
+                type="number"
+                id="quantity"
+                min="1"
+                required
+                autocomplete="off"
+                placeholder="Ej. 10"
+              />
+            </div>
 
-            <label for="price">Precio:</label>
-            <input
-              type="number"
-              id="price"
-              step="0.01"
-              min="0"
-              required
-              autocomplete="off"
-              placeholder="Ej. 25.99"
-            />
+            <div class="form-group">
+              <label for="price">Precio:</label>
+              <input
+                type="number"
+                id="price"
+                step="0.01"
+                min="0"
+                required
+                autocomplete="off"
+                placeholder="Ej. 25.99"
+              />
+            </div>
 
             <button type="submit">Agregar Producto</button>
           </form>
-        </fieldset>
+        </section>
 
-        <!-- Tabla de Inventario -->
-        <h2>Inventario Actual</h2>
-        <input type="text" id="searchInput" placeholder="Buscar producto..." />
-        <table aria-live="polite">
-          <thead>
-            <tr>
-              <th>Código de Barras</th>
-              <th>Nombre</th>
-              <th>Categoría</th>
-              <th>Cantidad</th>
-              <th>Precio</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="inventoryBody">
-            <!-- Aquí se insertarán dinámicamente los productos -->
-          </tbody>
-        </table>
+        <!-- Sección de Inventario -->
+        <section class="inventory-section">
+          <div class="inventory-header">
+            <h2>Inventario Actual</h2>
+          </div>
+          
+          <input type="text" id="searchInput" placeholder="Buscar producto..." />
+          
+          <table aria-live="polite">
+            <thead>
+              <tr>
+                <th>Código de Barras</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryBody">
+              <!-- Aquí se insertarán dinámicamente los productos -->
+            </tbody>
+          </table>
+          
+          <!-- Sección de Reportes -->
+          <div class="reports-section">
+            <button id="generateInventoryReport">Generar Reporte de Inventario</button>
+            <button id="generateSalesReport">Generar Reporte de Ventas</button>
+            <button id="generateHistoricalReport">Generar Reporte Histórico</button>
+          </div>
+        </section>
+      </div>
 
-        <div class="report-buttons">
-          <button id="generateInventoryReport">
-            Generar Reporte de Inventario
-          </button>
-          <button id="generateSalesReport">Generar Reporte de Ventas</button>
-        </div>
-      </section>
+      <!-- Footer con botón de cerrar sesión -->
+      <footer class="footer">
+        <div></div>
+        <button id="logoutBtn" type="button">Cerrar Sesión</button>
+      </footer>
     </div>
 
     <!-- Ventana Modal de Ventas -->
@@ -147,7 +174,7 @@
       </div>
     </div>
 
-    <!-- Scripts agrupados al final para mejorar rendimiento -->
+    <!-- Scripts -->
     <script type="module" src="js/config.js"></script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/product.js"></script>
@@ -169,14 +196,12 @@
           onLogin: (user) => {
             // Mostrar elementos ocultos cuando el usuario inicia sesión
             document.getElementById("userInfo").classList.remove("hidden");
-            document
-              .getElementById("inventorySection")
-              .classList.remove("hidden");
+            document.getElementById("inventorySection").classList.remove("hidden");
           },
         });
       });
     </script>
-    <script type="module" src="/js/app.js"></script>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         // Enfocar automáticamente el campo de código de barras en el formulario de registro de productos
@@ -210,6 +235,7 @@
         });
       });
     </script>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const toggleButton = document.getElementById("toggleProductForm");
@@ -217,7 +243,7 @@
       
         toggleButton?.addEventListener("click", () => {
           if (productForm.style.display === "none" || !productForm.style.display) {
-            productForm.style.display = "block"; // Mostrar el formulario
+            productForm.style.display = "grid"; // Mostrar el formulario como grid
             toggleButton.textContent = "Ocultar";
           } else {
             productForm.style.display = "none"; // Ocultar el formulario

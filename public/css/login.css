@@ -1,0 +1,250 @@
+/* Importar fuente Inter de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Variables globales */
+:root {
+  --primary-color: #130ac0;
+  --secondary-color: #555;
+  --accent-color: #c01c0a;
+  --success-color: rgb(52, 241, 9);
+  --light-bg: #f5f7fa;
+  --dark-text: #2c3e50;
+  --light-text: #ecf0f1;
+  --border-radius: 8px;
+  --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-image: url('../img/fondo_login.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  line-height: 1.6;
+  color: var(--dark-text);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Contenedor principal */
+#authContainer {
+  width: 100%;
+  max-width: 400px;
+  backdrop-filter: blur(8px);
+  padding: 20px;
+  border-radius: 12px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Formularios */
+form {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Título del formulario */
+form h2 {
+  color: var(--primary-color);
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+}
+
+form h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+}
+
+/* Campos del formulario */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--dark-text);
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(19, 10, 192, 0.15);
+  background-color: white;
+}
+
+input::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Botones */
+button {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s ease;
+}
+
+button:hover {
+  background: #1008a0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(19, 10, 192, 0.3);
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Links */
+p {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Switch entre formularios (para cuando actives el registro) */
+#registerForm {
+  display: none;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  #authContainer {
+    width: 90%;
+    padding: 10px;
+  }
+  
+  form {
+    padding: 25px;
+  }
+  
+  form h2 {
+    font-size: 24px;
+  }
+  
+  input {
+    padding: 12px;
+  }
+}
+
+/* Estado de errores */
+.error-input {
+  border-color: var(--accent-color) !important;
+  background-color: rgba(255, 235, 235, 0.5) !important;
+}
+
+.error-message {
+  color: var(--accent-color);
+  font-size: 12px;
+  margin-top: -15px;
+  margin-bottom: 15px;
+}
