@@ -24,4 +24,17 @@ setPersistence(auth, browserLocalPersistence)
     .then(() => console.log("✅ Persistencia de sesión activada."))
     .catch((error) => console.error("❌ Error al establecer persistencia:", error));
 
-console.log("✅ Firebase inicializado correctamente");
+// detectar el local 
+export function getFirestoreCollectionPath() {
+    const pathname = window.location.pathname;
+
+    if (pathname.includes("gamer.html")) {
+        return "inventario_gamer";
+    }
+
+    if (pathname.includes("tecnico.html")) {
+        return "inventario_tecnico";
+    }
+
+    return "products"; // Default para otros casos
+}

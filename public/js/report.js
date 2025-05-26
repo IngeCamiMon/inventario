@@ -163,92 +163,82 @@ async function generateInventoryReport() {
 // Función para generar el reporte de ventas (últimas 30 ventas)
 async function generateSalesReport() {
     const doc = new jsPDF();
-    doc.text("Reporte de Ventas Recientes", 75, 20);
-    
+    doc.text("Reporte de Ventas del Día", 75, 20);
+
     const fecha = new Date().toLocaleDateString();
     const hora = new Date().toLocaleTimeString();
     doc.text(`Fecha: ${fecha} - Hora: ${hora}`, 20, 30);
-    
+
     let y = 50; // Posición inicial en la página
     const pageHeight = doc.internal.pageSize.height;
     const lineHeight = 50; // Altura de cada bloque de texto
-    
+
     try {
-        // Obtener las últimas 30 ventas ordenadas por fecha
+        // Calcular el rango de hoy
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        // Obtener solo las ventas del día actual
         const q = query(
             collection(db, "sales"),
-            orderBy("timestamp", "desc"),
-            limit(30)
+            where("timestamp", ">=", Timestamp.fromDate(today)),
+            where("timestamp", "<", Timestamp.fromDate(tomorrow)),
+            orderBy("timestamp", "desc")
         );
-        
+
         const querySnapshot = await getDocs(q);
         let totalVentas = 0;
-        
-        // Encabezado
+
         doc.setFontSize(12);
-        doc.text("Resumen de Ventas Recientes", 80, 40);
-        
-        // Si no hay ventas
+        doc.text("Resumen de Ventas del Día", 80, 40);
+
         if (querySnapshot.empty) {
-            doc.text("No hay ventas registradas", 80, y);
-            doc.save("Reporte_Ventas_Recientes.pdf");
+            doc.text("No hay ventas registradas hoy", 80, y);
+            doc.save("Reporte_Ventas_Dia.pdf");
             return;
         }
-        
+
         querySnapshot.forEach((sale) => {
             const data = sale.data();
-            
-            // Verificar si hay suficiente espacio en la página actual
+
             if (y + lineHeight > pageHeight - 20) {
-                doc.addPage(); // Agregar una nueva página
-                y = 20; // Reiniciar la posición vertical
+                doc.addPage();
+                y = 20;
             }
-            
-            // Buscar el nombre del producto en diferentes campos posibles
-            let productName = "Sin nombre";
-            if (data.productName) {
-                productName = data.productName;
-            } else if (data.name) {
-                productName = data.name;
-            } else if (data.producto) {
-                productName = data.producto;
-            } else if (data.nombre) {
-                productName = data.nombre;
-            }
-            
-            // Limitar longitud del nombre para evitar desbordamiento
+
+            let productName = data.productName || data.name || data.producto || data.nombre || "Sin nombre";
             if (productName.length > 30) {
                 productName = productName.substring(0, 27) + "...";
             }
-            
+
             const quantity = data.quantity ?? data.cantidad ?? "Desconocido";
             const price = data.price ? `$${data.price.toFixed(2)}` : (data.precio ? `$${data.precio.toFixed(2)}` : "Precio no disponible");
             const total = data.total ? `$${data.total.toFixed(2)}` : "Total no disponible";
             const soldBy = data.soldBy || data.vendedor || "Vendedor desconocido";
             const timestamp = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : "Fecha no disponible";
-            
-            // Sumar al total de ventas
+
             if (data.total) {
                 totalVentas += data.total;
             }
-            
+
             doc.text(`Producto: ${productName}`, 20, y);
             doc.text(`Cantidad: ${quantity}`, 20, y + 10);
             doc.text(`Precio Unitario: ${price}`, 20, y + 20);
             doc.text(`Total: ${total}`, 20, y + 30);
             doc.text(`Vendido por: ${soldBy}`, 120, y + 10);
             doc.text(`Fecha: ${timestamp}`, 120, y + 20);
-            doc.line(20, y + 40, 190, y + 40); // Línea separadora
-            
-            y += lineHeight; // Incrementar la posición vertical
+            doc.line(20, y + 40, 190, y + 40);
+
+            y += lineHeight;
         });
-        
-        // Agregar el total de ventas al final
+
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
         doc.text(`Total de Ventas: $${totalVentas.toFixed(2)}`, 80, y + 10);
-        
-        doc.save("Reporte_Ventas_Recientes.pdf");
+
+        doc.save("Reporte_Ventas_Dia.pdf");
     } catch (error) {
         console.error("Error generando el reporte de ventas:", error);
         alert("Error generando el reporte de ventas.");

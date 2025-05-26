@@ -1,6 +1,6 @@
 // database.js
 // Importa la instancia de Firestore desde config.js
-import { db } from './config.js';
+import { db, getFirestoreCollectionPath } from './config.js';
 
 // Importa las funciones necesarias de Firestore
 import { 
@@ -11,7 +11,8 @@ import {
     doc, 
     getDocs, 
     query, 
-    where 
+    where,
+    getDoc
 } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 /**
@@ -25,8 +26,9 @@ class DatabaseService {
             throw new Error("Firestore no inicializado");
         }
         
-        // Colección para productos
-        this.productsCollection = 'products'; // Importante: Usa el mismo nombre en toda la app
+        // Obtiene la colección según la página actual
+        this.productsCollection = getFirestoreCollectionPath();
+        console.log("📂 Colección activa de Firestore:", this.productsCollection);
     }
 
     /**

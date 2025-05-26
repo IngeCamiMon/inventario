@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .dashboards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .dashboard-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .dashboard-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .dashboard-card a {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .dashboard-card a:hover {
+            background-color: #45a049;
+        }
+        .logout-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .user-info {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Panel de Administrador</h1>
+    </div>
+    
+    <div class="container">
+        <div class="user-info">
+            <span id="userEmail">Bienvenido</span>
+            <button id="logoutBtn" class="logout-btn">Cerrar Sesión</button>
+        </div>
+        
+        <div class="card">
+            <h2>Acceso a Todas las Vistas</h2>
+            <p>Como administrador, tienes acceso a todas las vistas del sistema.</p>
+        </div>
+        
+        <div class="dashboards">
+            <div class="dashboard-card">
+                <h3>Vista de Usuario Local</h3>
+                <p>Accede a la vista estándar para usuarios locales.</p>
+                <a href="index.html">Acceder</a>
+            </div>
+            
+            <div class="dashboard-card">
+                <h3>Vista de Técnico</h3>
+                <p>Accede a la vista para técnicos y personal de laboratorio.</p>
+                <a href="tecnico.html">Acceder</a>
+            </div>
+            
+            <div class="dashboard-card">
+                <h3>Vista de Gamer</h3>
+                <p>Accede a la vista para usuarios con perfil gamer.</p>
+                <a href="gamer.html">Acceder</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initAuthListeners, setupAuthStateListener, handleLogout } from "/js/auth.js";
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar los listeners de autenticación
+            initAuthListeners();
+            
+            // Configurar el listener de estado de autenticación
+            setupAuthStateListener();
+            
+            // Asegurarse de que el botón de logout funcione
+            const logoutBtn = document.getElementById("logoutBtn");
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", handleLogout);
+            }
+        });
+    </script>
+</body>
+</html>
