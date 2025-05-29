@@ -22,6 +22,7 @@ const saleProductNameInput = document.getElementById("saleProductName"); // Nuev
 
 // Agregar campo de usuario en la venta
 const saleUserEmail = document.getElementById("saleUserEmail");
+const saleSubmitBtn = document.getElementById("saleSubmitBtn"); // Botón de envío
 
 document.addEventListener("DOMContentLoaded", () => {
     onAuthStateChanged(auth, (user) => {
@@ -31,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".edit-btn, .delete-btn").forEach(btn => {
                 btn.style.display = isAdmin ? "inline-block" : "none";
             });
-            
         }
 
         // Observar cambios en la lista de productos y actualizar permisos
@@ -84,6 +84,8 @@ saleBarcodeInput?.addEventListener("input", async () => {
 async function handleSale(event) {
     event.preventDefault();
 
+    if (saleSubmitBtn) saleSubmitBtn.disabled = true; // Deshabilita el botón para evitar doble envío
+
     const barcode = saleBarcodeInput.value.trim();
     const quantity = parseInt(document.getElementById("saleQuantity").value, 10);
     const user = auth.currentUser; // Obtener usuario autenticado
@@ -91,6 +93,7 @@ async function handleSale(event) {
 
     if (!barcode || quantity <= 0) {
         alert("⚠️ Ingrese datos válidos para la venta.");
+        if (saleSubmitBtn) saleSubmitBtn.disabled = false;
         return;
     }
 
@@ -99,11 +102,13 @@ async function handleSale(event) {
         
         if (!product) {
             alert("⚠️ Producto no encontrado.");
+            if (saleSubmitBtn) saleSubmitBtn.disabled = false;
             return;
         }
 
         if (product.quantity < quantity) {
             alert("⚠️ No hay suficiente stock.");
+            if (saleSubmitBtn) saleSubmitBtn.disabled = false;
             return;
         }
 
@@ -134,6 +139,7 @@ async function handleSale(event) {
     } catch (error) {
         console.error("❌ Error en la venta:", error);
         alert(`Ocurrió un error al procesar la venta: ${error.message}`);
+        if (saleSubmitBtn) saleSubmitBtn.disabled = false;
     }
 }
 
