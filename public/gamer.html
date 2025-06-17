@@ -3,13 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sistema de Inventario</title>
-    <link rel="stylesheet" href="css/styles.css" />
-
+    <title>Sistema de Inventario Local Gamer</title>
+    <link rel="stylesheet" href="css/gamer.css" />
   </head>
   <body>
     <div class="app-container">
-      <!-- Header con título y información de usuario -->
       <header class="header">
         <h1>Sistema de Inventario Local Gamer</h1>
         <div id="userInfo" class="hidden">
@@ -17,82 +15,43 @@
         </div>
       </header>
 
-      <!-- Contenido principal -->
       <div class="main-content" id="inventorySection" class="hidden">
-        <!-- Acciones Rápidas -->
         <section class="quick-actions">
           <button id="openSalesModal" class="action-button action-sales">REALIZAR VENTA</button>
         </section>
 
-        <!-- Sección de Registro de Productos -->
-        <section class="product-registration">
-          <div class="product-registration-header">
-            <h2>Registrar Producto</h2>
-            <button id="toggleProductForm" type="button">Mostrar/Ocultar</button>
-          </div>
-          
-          <form id="productForm">
-            <div class="form-group">
-              <label for="barcode">Código de Barras:</label>
-              <input
-                type="text"
-                id="barcode"
-                required
-                autocomplete="off"
-                placeholder="Ingrese código de barras"
-                autofocus
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="productName">Nombre del Producto:</label>
-              <input
-                type="text"
-                id="productName"
-                required
-                autocomplete="off"
-                placeholder="Ingrese nombre"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="category">Categoría:</label>
-              <input
-                type="text"
-                id="category"
-                required
-                autocomplete="off"
-                placeholder="Ingrese categoría"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="quantity">Cantidad:</label>
-              <input
-                type="number"
-                id="quantity"
-                min="1"
-                required
-                autocomplete="off"
-                placeholder="Ej. 10"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="price">Precio:</label>
-              <input
-                type="number"
-                id="price"
-                step="0.01"
-                min="0"
-                required
-                autocomplete="off"
-                placeholder="Ej. 25.99"
-              />
-            </div>
-
-            <button type="submit">Agregar Producto</button>
+        
+    <section class="product-registration">
+      <div class="product-registration-header">
+        <h2>Registrar Producto</h2>
+        <button id="toggleProductForm" type="button">Mostrar/Ocultar</button>
+      </div>
+    
+          <form id="productForm" style="display: grid;" style="margin-bottom: 2rem;">
+            <input type="hidden" id="gamerProductId">
+            <input type="text" id="barcode" placeholder="Código de barras" required>
+            <input type="text" id="productName" placeholder="Nombre" required>
+            <input type="text" id="category" placeholder="Categoría" required>
+            <input type="number" id="quantity" placeholder="Cantidad" required>
+            <input type="number" id="price" placeholder="Precio" required>
+            <button type="submit">Guardar Producto</button>
           </form>
+          <table id="gamerProductsTable" border="1" cellpadding="5" cellspacing="0" style="width:100%;margin-bottom:2rem;">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th class="admin-only-col">Cantidad</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryBody">
+              <!-- Aquí se llenan los productos gamer -->
+            </tbody>
+          </table>
+        
         </section>
 
         <!-- Sección de Inventario -->
@@ -100,16 +59,16 @@
           <div class="inventory-header">
             <h2>Inventario Actual</h2>
           </div>
-          
+
           <input type="text" id="searchInput" placeholder="Buscar producto..." />
-          
+
           <table aria-live="polite">
             <thead>
               <tr>
                 <th>Código de Barras</th>
                 <th>Nombre</th>
                 <th>Categoría</th>
-                <th>Cantidad</th>
+                <th class="admin-only-col">Cantidad</th>
                 <th>Precio</th>
                 <th>Acciones</th>
               </tr>
@@ -118,83 +77,51 @@
               <!-- Aquí se insertarán dinámicamente los productos -->
             </tbody>
           </table>
-          
-          <!-- Sección de Reportes -->
-          <div class="reports-section">
-            <button id="generateInventoryReport">Generar Reporte de Inventario</button>
-            <button id="generateSalesReport">Generar Reporte de Ventas</button>
-            <button id="generateHistoricalReport">Generar Reporte Histórico</button>
-          </div>
-        </section>
+    
+          <button id="generateInventoryReport">Generar Reporte de Inventario</button>
+          <button id="generateSalesReport">Generar Reporte de Ventas</button>
+          <button id="generateHistoricalReport">Generar Reporte Histórico</button>
+        </div>
       </div>
 
-      <!-- Footer con botón de cerrar sesión -->
       <footer class="footer">
         <div></div>
         <button id="logoutBtn" type="button">Cerrar Sesión</button>
       </footer>
     </div>
 
-    <!-- Ventana Modal de Ventas -->
     <div id="salesModal" class="modal hidden">
       <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Registrar Venta</h2>
         <form id="salesForm">
           <label for="saleBarcode">Código de Barras:</label>
-          <input
-            type="text"
-            id="saleBarcode"
-            required
-            autocomplete="off"
-            placeholder="Escanear o ingresar código"
-            autofocus
-          />
-
+          <input type="text" id="saleBarcode" required autocomplete="off" placeholder="Escanear o ingresar código" autofocus />
           <label for="saleProductName">Nombre del Producto:</label>
-          <input
-            type="text"
-            id="saleProductName"
-            readonly
-            placeholder="Nombre del producto"
-          />
-
+          <input type="text" id="saleProductName" readonly placeholder="Nombre del producto" />
           <label for="saleQuantity">Cantidad:</label>
-          <input
-            type="number"
-            id="saleQuantity"
-            min="1"
-            required
-            autocomplete="off"
-            placeholder="Cantidad a vender"
-          />
-
+          <input type="number" id="saleQuantity" min="1" required autocomplete="off" placeholder="Cantidad a vender" />
           <button type="submit">Generar Venta</button>
         </form>
       </div>
     </div>
 
-    <!-- Scripts -->
     <script type="module" src="js/config.js"></script>
     <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/product.js"></script>
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/database.js"></script>
+    <script type="module" src="js/app_gamer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="module" src="js/sales.js"></script>
+    <script type="module" src="js/product_gamer.js"></script>
+    <script type="module" src="js/report_gamer.js"></script>
+    <script type="module" src="js/sales_gamer.js"></script>
     <script type="module" src="js/search.js"></script>
-    <script type="module" src="js/report.js"></script>
 
     <script type="module">
       import { initAuthListeners, setupAuthStateListener } from "/js/auth.js";
-
       document.addEventListener("DOMContentLoaded", () => {
-        // Inicializar los listeners de autenticación
         initAuthListeners();
-
-        // Configurar el listener de estado de autenticación
         setupAuthStateListener({
           onLogin: (user) => {
-            // Mostrar elementos ocultos cuando el usuario inicia sesión
             document.getElementById("userInfo").classList.remove("hidden");
             document.getElementById("inventorySection").classList.remove("hidden");
           },
@@ -204,43 +131,27 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // Enfocar automáticamente el campo de código de barras en el formulario de registro de productos
-        const barcodeInput = document.getElementById("barcode");
-        if (barcodeInput) {
-          barcodeInput.focus();
-        }
-
-        // Configurar el modal de ventas
         const openSalesModalBtn = document.getElementById("openSalesModal");
         const salesModal = document.getElementById("salesModal");
         const saleBarcodeInput = document.getElementById("saleBarcode");
         const closeModalBtn = document.querySelector(".close-btn");
-
-        // Abrir el modal de ventas
         openSalesModalBtn?.addEventListener("click", () => {
-          // Mostrar el modal
           salesModal.classList.remove("hidden");
           salesModal.style.display = "flex";
-
-          // Enfocar automáticamente el campo de código de barras en el modal
-          if (saleBarcodeInput) {
-            saleBarcodeInput.focus();
-          }
+          if (saleBarcodeInput) saleBarcodeInput.focus();
         });
-
-        // Cerrar el modal al hacer clic en el botón de cierre
         closeModalBtn?.addEventListener("click", () => {
           salesModal.classList.add("hidden");
           salesModal.style.display = "none";
         });
       });
     </script>
-
+  
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const toggleButton = document.getElementById("toggleProductForm");
         const productForm = document.getElementById("productForm");
-      
+
         toggleButton?.addEventListener("click", () => {
           if (productForm.style.display === "none" || !productForm.style.display) {
             productForm.style.display = "grid"; // Mostrar el formulario como grid
@@ -253,4 +164,6 @@
       });
     </script>
   </body>
+</html>
+
 </html>

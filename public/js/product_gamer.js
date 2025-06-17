@@ -1,11 +1,8 @@
+// product_gamer.js modificado para usar la colección "gamer"
 import { db, auth } from "./config.js";
 import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { handleEditProduct } from "./app.js"; // Importar la función de edición
+import { handleEditProduct } from "./app.js";
 
-/**
- * Carga los productos en la tabla del inventario.
- * @param {string} userId - ID del usuario autenticado.
- */
 export async function loadProducts(userId) {
     const inventoryBody = document.getElementById("inventoryBody");
     if (!inventoryBody) {
@@ -13,11 +10,11 @@ export async function loadProducts(userId) {
         return;
     }
 
-    inventoryBody.innerHTML = ""; // Limpiar la tabla antes de llenarla
-    const fragment = document.createDocumentFragment(); // Optimización del acceso al DOM
+    inventoryBody.innerHTML = "";
+    const fragment = document.createDocumentFragment();
 
     try {
-        const querySnapshot = await getDocs(collection(db, "products"));
+        const querySnapshot = await getDocs(collection(db, "gamer"));
         if (querySnapshot.empty) {
             console.warn("⚠️ No hay productos en la base de datos.");
             inventoryBody.innerHTML = "<tr><td colspan='6'>No hay productos disponibles.</td></tr>";
@@ -27,7 +24,7 @@ export async function loadProducts(userId) {
         querySnapshot.forEach((doc) => {
             const product = doc.data();
             const row = document.createElement("tr");
-            row.dataset.id = doc.id; // Se almacena el ID del producto en el dataset del <tr>
+            row.dataset.id = doc.id;
 
             row.innerHTML = `
                 <td>${product.barcode}</td>
@@ -44,7 +41,7 @@ export async function loadProducts(userId) {
             fragment.appendChild(row);
         });
 
-        inventoryBody.appendChild(fragment); // Añadir todas las filas a la tabla en un solo paso
+        inventoryBody.appendChild(fragment);
 
     } catch (error) {
         console.error("❌ Error al cargar productos:", error);
@@ -52,7 +49,6 @@ export async function loadProducts(userId) {
     }
 }
 
-// Delegación de eventos para evitar múltiples listeners
 document.getElementById("inventoryBody")?.addEventListener("click", async (event) => {
     const target = event.target;
     const row = target.closest("tr");
@@ -65,7 +61,7 @@ document.getElementById("inventoryBody")?.addEventListener("click", async (event
     } else if (target.classList.contains("delete-btn")) {
         if (confirm("¿Seguro que deseas eliminar este producto?")) {
             try {
-                await deleteDoc(doc(db, "products", productId));
+                await deleteDoc(doc(db, "gamer", productId));
                 alert("✅ Producto eliminado correctamente.");
                 loadProducts(auth.currentUser?.uid);
             } catch (error) {

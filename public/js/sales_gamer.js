@@ -4,15 +4,13 @@ import { doc, updateDoc, addDoc, collection, serverTimestamp } from "https://www
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const auth = getAuth();
-const ADMIN_EMAIL = "jalcuza_58@hotmail.com"; // Reemplaza con el correo del usuario autorizado
+const ADMIN_EMAIL = "jalcuza_58@hotmail.com";
 
-// Verificar si jsPDF está correctamente cargado
 const jsPDF = window.jspdf?.jsPDF;
 if (!jsPDF) {
     console.error("❌ jsPDF no está disponible. Verifica la importación en el HTML.");
 }
 
-// Obtener elementos del DOM
 const salesModal = document.getElementById("salesModal");
 const openSalesModalBtn = document.getElementById("openSalesModal");
 const closeSalesModalBtn = document.querySelector(".close-btn");
@@ -22,13 +20,10 @@ const saleProductNameInput = document.getElementById("saleProductName");
 const saleUserEmail = document.getElementById("saleUserEmail");
 const saleSubmitBtn = document.getElementById("saleSubmitBtn");
 
-// Función para mostrar/ocultar botones y columna "Cantidad" solo para admin
 function updateAdminPermissions(isAdmin) {
-    // Botones editar/eliminar
     document.querySelectorAll(".edit-btn, .delete-btn").forEach(btn => {
         btn.style.display = isAdmin ? "inline-block" : "none";
     });
-    // Columna "Cantidad" (cabecera y celdas)
     document.querySelectorAll(".admin-only-col").forEach(col => {
         col.style.display = isAdmin ? "" : "none";
     });
@@ -39,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const isAdmin = user && user.email === ADMIN_EMAIL;
         updateAdminPermissions(isAdmin);
 
-        // Observar cambios en la lista de productos y actualizar permisos
         const inventoryBody = document.getElementById("inventoryBody");
         if (inventoryBody) {
             const observer = new MutationObserver(() => {
@@ -50,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Abrir la ventana modal
 openSalesModalBtn?.addEventListener("click", () => {
     salesModal.classList.remove("hidden");
     salesModal.style.display = "flex";
@@ -58,13 +51,11 @@ openSalesModalBtn?.addEventListener("click", () => {
     if (saleUserEmail) saleUserEmail.value = user ? user.email : "Desconocido";
 });
 
-// Cerrar la ventana modal
 closeSalesModalBtn?.addEventListener("click", () => {
     salesModal.classList.add("hidden");
     salesModal.style.display = "none";
 });
 
-// Autocompletar el nombre del producto al ingresar código de barras
 saleBarcodeInput?.addEventListener("input", async () => {
     const barcode = saleBarcodeInput.value.trim();
     if (!barcode) {
@@ -80,7 +71,6 @@ saleBarcodeInput?.addEventListener("input", async () => {
     }
 });
 
-// Manejar la venta
 async function handleSale(event) {
     event.preventDefault();
 
@@ -112,12 +102,11 @@ async function handleSale(event) {
             return;
         }
 
-        // Actualizar stock
+        // Actualiza el stock en la colección "gamer"
         const newQuantity = product.quantity - quantity;
-        const productRef = doc(db, "products", product.id);
+        const productRef = doc(db, "gamer", product.id);
         await updateDoc(productRef, { quantity: newQuantity });
 
-        // Registrar la venta
         const saleData = {
             barcode,
             productName: product.name,
@@ -130,7 +119,6 @@ async function handleSale(event) {
 
         await addDoc(collection(db, "sales"), saleData);
 
-        // Generar recibo
         generateReceipt(saleData);
 
         alert("✅ Venta realizada con éxito.");
@@ -143,9 +131,6 @@ async function handleSale(event) {
     }
 }
 
-/**
- * Genera un recibo en PDF con jsPDF.
- */
 function generateReceipt(sale) {
     if (!jsPDF) {
         console.error("❌ jsPDF no está disponible.");
@@ -166,5 +151,4 @@ function generateReceipt(sale) {
     doc.save(`Recibo_${sale.barcode}.pdf`);
 }
 
-// Agregar evento al formulario de ventas
 salesForm?.addEventListener("submit", handleSale);

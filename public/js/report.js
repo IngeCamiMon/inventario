@@ -13,16 +13,23 @@ const salesReportBtn = document.getElementById("generateSalesReport");
 const historicalReportBtn = document.getElementById("generateHistoricalReport"); // Botón para el reporte histórico
 
 // Verificar si el usuario es administrador
+// Verificar si el usuario es administrador
 onAuthStateChanged(auth, (user) => {
     if (user && user.email === ADMIN_EMAIL) {
-        // Mostrar el botón de reporte histórico solo para el administrador
+        // Mostrar los botones solo para el administrador
         if (historicalReportBtn) {
             historicalReportBtn.style.display = "inline-block";
         }
+        if (inventoryReportBtn) {
+            inventoryReportBtn.style.display = "inline-block";
+        }
     } else {
-        // Ocultar el botón de reporte histórico para usuarios no administradores
+        // Ocultar los botones para usuarios no administradores
         if (historicalReportBtn) {
             historicalReportBtn.style.display = "none";
+        }
+        if (inventoryReportBtn) {
+            inventoryReportBtn.style.display = "none";
         }
     }
 });

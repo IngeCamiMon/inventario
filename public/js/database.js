@@ -3,14 +3,14 @@
 import { db, getFirestoreCollectionPath } from './config.js';
 
 // Importa las funciones necesarias de Firestore
-import { 
-    collection, 
-    addDoc, 
-    updateDoc, 
-    deleteDoc, 
-    doc, 
-    getDocs, 
-    query, 
+import {
+    collection,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    doc,
+    getDocs,
+    query,
     where,
     getDoc
 } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
@@ -19,18 +19,6 @@ import {
  * Clase que gestiona las operaciones CRUD en la base de datos Firestore.
  */
 class DatabaseService {
-    constructor() {
-        // Verifica que la instancia de db esté disponible
-        if (!db) {
-            console.error("❌ Error: La instancia de Firestore no está disponible");
-            throw new Error("Firestore no inicializado");
-        }
-        
-        // Obtiene la colección según la página actual
-        this.productsCollection = getFirestoreCollectionPath();
-        console.log("📂 Colección activa de Firestore:", this.productsCollection);
-    }
-
     /**
      * Guarda o actualiza un producto en Firestore.
      * @param {Object} product - Datos del producto.
@@ -39,50 +27,22 @@ class DatabaseService {
      */
     async saveProduct(product, userId) {
         try {
-            if (!product || typeof product !== 'object') {
-                throw new Error("⚠️ Datos del producto inválidos");
-            }
-
-            if (!userId) {
-                throw new Error("⚠️ ID de usuario no proporcionado");
-            }
-
-            console.log("📤 Guardando producto en Firestore:", product);
-
-            // Prepara datos comunes
+            const collectionName = getFirestoreCollectionPath();
+            if (!product || typeof product !== 'object') throw new Error("Datos inválidos");
+            if (!userId) throw new Error("ID de usuario no proporcionado");
             const timestamp = new Date();
-            
             if (product.id) {
-                // Actualización de producto existente
-                const productRef = doc(db, this.productsCollection, product.id);
-                
-                // Datos para actualización
-                const updateData = {
-                    ...product,
-                    updatedAt: timestamp,
-                    updatedBy: userId
-                };
-                
-                // Elimina el ID del objeto para no sobrescribirlo en Firestore
+                const productRef = doc(db, collectionName, product.id);
+                const updateData = { ...product, updatedAt: timestamp, updatedBy: userId };
                 delete updateData.id;
-                
                 await updateDoc(productRef, updateData);
-                console.log("✅ Producto actualizado:", product.id);
                 return product.id;
             } else {
-                // Creación de nuevo producto
-                const newProduct = {
-                    ...product,
-                    createdAt: timestamp,
-                    createdBy: userId
-                };
-                
-                const docRef = await addDoc(collection(db, this.productsCollection), newProduct);
-                console.log("✅ Nuevo producto guardado con ID:", docRef.id);
+                const newProduct = { ...product, createdAt: timestamp, createdBy: userId };
+                const docRef = await addDoc(collection(db, collectionName), newProduct);
                 return docRef.id;
             }
         } catch (error) {
-            console.error("❌ Error al guardar producto:", error.message);
             throw error;
         }
     }
@@ -94,29 +54,19 @@ class DatabaseService {
      */
     async getAllProducts(userId = null) {
         try {
+            const collectionName = getFirestoreCollectionPath();
             let productsQuery;
-            
             if (userId) {
-                // Obtener solo productos del usuario actual
-                productsQuery = query(
-                    collection(db, this.productsCollection), 
-                    where('createdBy', '==', userId)
-                );
+                productsQuery = query(collection(db, collectionName), where('createdBy', '==', userId));
             } else {
-                // Obtener todos los productos
-                productsQuery = collection(db, this.productsCollection);
+                productsQuery = collection(db, collectionName);
             }
-            
             const querySnapshot = await getDocs(productsQuery);
-            const products = querySnapshot.docs.map(doc => ({
+            return querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
-            
-            console.log(`📦 Productos obtenidos (${products.length}):`, products);
-            return products;
         } catch (error) {
-            console.error("❌ Error al obtener productos:", error.message);
             throw error;
         }
     }
@@ -128,16 +78,12 @@ class DatabaseService {
      */
     async deleteProduct(productId) {
         try {
-            if (!productId) {
-                throw new Error("⚠️ ID de producto no proporcionado");
-            }
-
-            const productRef = doc(db, this.productsCollection, productId);
+            const collectionName = getFirestoreCollectionPath();
+            if (!productId) throw new Error("ID de producto no proporcionado");
+            const productRef = doc(db, collectionName, productId);
             await deleteDoc(productRef);
-            console.log("🗑️ Producto eliminado:", productId);
             return true;
         } catch (error) {
-            console.error("❌ Error al eliminar producto:", error.message);
             return false;
         }
     }
@@ -149,36 +95,18 @@ class DatabaseService {
      */
     async getProductByBarcode(barcode) {
         try {
-            if (!barcode) {
-                throw new Error("⚠️ Código de barras no proporcionado");
-            }
-
-            const q = query(
-                collection(db, this.productsCollection), 
-                where('barcode', '==', barcode)
-            );
-            
+            const collectionName = getFirestoreCollectionPath();
+            if (!barcode) throw new Error("Código de barras no proporcionado");
+            const q = query(collection(db, collectionName), where('barcode', '==', barcode));
             const querySnapshot = await getDocs(q);
-            
-            if (querySnapshot.empty) {
-                console.warn("⚠️ No se encontró un producto con el código de barras:", barcode);
-                return null;
-            }
-            
+            if (querySnapshot.empty) return null;
             const productDoc = querySnapshot.docs[0];
-            const product = {
-                id: productDoc.id,
-                ...productDoc.data()
-            };
-            
-            console.log("🔍 Producto encontrado:", product);
-            return product;
+            return { id: productDoc.id, ...productDoc.data() };
         } catch (error) {
-            console.error("❌ Error al buscar producto:", error.message);
             throw error;
         }
     }
-    
+
     /**
      * Obtiene un producto por su ID.
      * @param {string} productId - ID del producto.
@@ -186,27 +114,13 @@ class DatabaseService {
      */
     async getProductById(productId) {
         try {
-            if (!productId) {
-                throw new Error("⚠️ ID de producto no proporcionado");
-            }
-            
-            const productRef = doc(db, this.productsCollection, productId);
+            const collectionName = getFirestoreCollectionPath();
+            if (!productId) throw new Error("ID de producto no proporcionado");
+            const productRef = doc(db, collectionName, productId);
             const productSnap = await getDoc(productRef);
-            
-            if (!productSnap.exists()) {
-                console.warn("⚠️ No se encontró el producto con ID:", productId);
-                return null;
-            }
-            
-            const product = {
-                id: productSnap.id,
-                ...productSnap.data()
-            };
-            
-            console.log("🔍 Producto encontrado:", product);
-            return product;
+            if (!productSnap.exists()) return null;
+            return { id: productSnap.id, ...productSnap.data() };
         } catch (error) {
-            console.error("❌ Error al obtener producto por ID:", error.message);
             throw error;
         }
     }
@@ -214,6 +128,4 @@ class DatabaseService {
 
 // Exporta la instancia de DatabaseService para ser usada en otros módulos
 export const databaseService = new DatabaseService();
-
-// También exporta la clase para poder crear nuevas instancias si es necesario
 export default DatabaseService;

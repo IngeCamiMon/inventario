@@ -26,15 +26,9 @@ setPersistence(auth, browserLocalPersistence)
 
 // detectar el local 
 export function getFirestoreCollectionPath() {
-    const pathname = window.location.pathname;
-
-    if (pathname.includes("gamer.html")) {
-        return "inventario_gamer";
+    const path = window.location.pathname;
+    if (path.includes("gamer.html")) {
+        return "gamer";
     }
-
-    if (pathname.includes("tecnico.html")) {
-        return "inventario_tecnico";
-    }
-
-    return "products"; // Default para otros casos
+    return "products";
 }
