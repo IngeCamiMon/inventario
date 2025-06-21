@@ -1,37 +1,37 @@
-// app_gamer.js modificado para usar la colección "gamer"
+// app_tecnico.js - Principal para la página de inventario de tecnico
 import { db, auth } from "./config.js";
-import { 
-    collection, 
-    addDoc, 
-    doc, 
-    updateDoc, 
-    getDoc 
+import {
+    collection,
+    addDoc,
+    doc,
+    updateDoc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { loadProducts } from "./product_gamer.js"; // Corregido
+import { loadProducts_tecnico } from "./product_tecnico.js"; // Cambiado
 import { setupAuthStateListener } from "./auth.js";
 
-let editingProductId = null;
+let editingProductId_tecnico = null; // Variable específica para tecnico
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("🔹 DOM cargado en app.js");
+    console.log("🔹 DOM cargado en app_tecnico.js");
 
     setupAuthStateListener({
         onLogin: (user) => {
-            console.log("🔹 Callback onLogin ejecutado en app.js");
-            loadProducts(user.uid);
+            console.log("🔹 Callback onLogin ejecutado en app_tecnico.js");
+            loadProducts_tecnico(user.uid); // Función específica para tecnico
         },
         onLogout: () => {
-            console.log("🔹 Callback onLogout ejecutado en app.js");
+            console.log("🔹 Callback onLogout ejecutado en app_tecnico.js");
         }
     });
 
     const productForm = document.getElementById("productForm");
     if (productForm) {
-        productForm.addEventListener("submit", handleAddOrEditProduct);
+        productForm.addEventListener("submit", handleAddOrEditProduct_tecnico); // Función específica
     }
 });
 
-async function handleAddOrEditProduct(event) {
+async function handleAddOrEditProduct_tecnico(event) { // Nombre de función específico
     event.preventDefault();
 
     const productName = document.getElementById("productName");
@@ -62,33 +62,33 @@ async function handleAddOrEditProduct(event) {
     const currentUser = auth.currentUser;
 
     try {
-        if (editingProductId) {
-            const productRef = doc(db, "gamer", editingProductId);
+        if (editingProductId_tecnico) { // Variable específica
+            const productRef = doc(db, "tecnico_products", editingProductId_tecnico); // Colección tecnico_products
             await updateDoc(productRef, {
                 ...productData,
                 updatedBy: currentUser.uid,
                 updatedAt: new Date()
             });
-            alert("✅ Producto actualizado exitosamente");
+            alert("✅ Producto actualizado exitosamente en tecnico_products");
         } else {
-            await addDoc(collection(db, "gamer"), {
+            await addDoc(collection(db, "tecnico_products"), { // Colección tecnico_products
                 ...productData,
                 createdBy: currentUser.uid,
                 timestamp: new Date()
             });
-            alert("✅ Producto agregado exitosamente");
+            alert("✅ Producto agregado exitosamente a tecnico_products");
         }
 
         document.getElementById("productForm")?.reset();
-        editingProductId = null;
-        loadProducts(currentUser.uid);
+        editingProductId_tecnico = null; // Variable específica
+        loadProducts_tecnico(currentUser.uid); // Función específica
     } catch (error) {
-        console.error("❌ Error al procesar producto:", error);
+        console.error("❌ Error al procesar producto en tecnico_products:", error);
         alert("Error al procesar el producto: " + error.message);
     }
 }
 
-export async function handleEditProduct(productId) {
+export async function handleEditProduct_tecnico(productId) { // Nombre de función específico
     if (!db) {
         console.error("❌ Error: Firebase Firestore (db) no está inicializado.");
         alert("No se puede conectar a la base de datos.");
@@ -96,11 +96,11 @@ export async function handleEditProduct(productId) {
     }
 
     try {
-        const productRef = doc(db, "gamer", productId);
+        const productRef = doc(db, "tecnico_products", productId); // Colección tecnico_products
         const productSnap = await getDoc(productRef);
 
         if (!productSnap.exists()) {
-            alert("❌ Producto no encontrado.");
+            alert("❌ Producto no encontrado en tecnico_products.");
             return;
         }
 
@@ -112,13 +112,13 @@ export async function handleEditProduct(productId) {
             document.getElementById("category").value = productData.category || "";
             document.getElementById("quantity").value = productData.quantity || "";
             document.getElementById("barcode").value = productData.barcode || "";
-            editingProductId = productId;
+            editingProductId_tecnico = productId; // Variable específica
         } else {
-            console.warn("⚠️ Datos de producto no disponibles.");
+            console.warn("⚠️ Datos de producto no disponibles en tecnico_products.");
             alert("❌ Error al obtener los datos del producto.");
         }
     } catch (error) {
-        console.error("❌ Error al cargar producto para edición:", error);
+        console.error("❌ Error al cargar producto para edición en tecnico_products:", error);
         alert("Error al cargar el producto: " + error.message);
     }
 }

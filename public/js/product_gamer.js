@@ -1,7 +1,7 @@
 // product_gamer.js modificado para usar la colección "gamer"
 import { db, auth } from "./config.js";
 import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { handleEditProduct } from "./app.js";
+import { handleEditProduct } from "./app_gamer.js"; // Corregido
 
 export async function loadProducts(userId) {
     const inventoryBody = document.getElementById("inventoryBody");
