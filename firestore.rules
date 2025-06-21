@@ -9,11 +9,64 @@ service cloud.firestore {
     // leaves your app open to attackers. At that time, all client
     // requests to your Firestore database will be denied.
     //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
-    match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2025, 4, 26);
+    // Helper function to check if the user is the administrator
+    function isAdmin() {
+      return request.auth.token.email == 'jalcuza_58@hotmail.com';
     }
+
+    // Helper function to check if the user is the specific local user
+    function isLocalUser() {
+      return request.auth.token.email == 'local52@tecnologyjc.com';
+    }
+
+    // Helper function to check if the user is the specific gamer user
+    function isGamerUser() {
+      return request.auth.token.email == 'gamer@tecnologyjc.com';
+    }
+
+    // Helper function to check if the user is the specific tecnico user
+    function isTecnicoUser() {
+      return request.auth.token.email == 'laboratorio@tecnologyjc.com';
+    }
+
+    // Rules for 'products' collection
+    match /products/{productId} {
+      allow read: if request.auth != null; // Allow any authenticated user to read for now, can be restricted further
+      allow write: if isAdmin() || isLocalUser();
+    }
+
+    // Rules for 'gamer' collection
+    match /gamer/{gamerId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin() || isGamerUser();
+    }
+
+    // Rules for 'tecnico_products' collection
+    match /tecnico_products/{tecnicoProductId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin() || isTecnicoUser();
+    }
+
+    // Rules for 'sales' collection
+    // Assuming any authenticated user can create sales, but only admin can modify/delete past sales.
+    // Reading sales might be restricted based on roles or if users should only see their own sales.
+    // For now, allow authenticated to create, admin to do anything.
+    match /sales/{saleId} {
+      allow read: if request.auth != null; // Or more specific rules like isAdmin() or user owns the sale document
+      allow create: if request.auth != null; // Any authenticated user can make a sale
+      allow update, delete: if isAdmin(); // Only admin can modify/delete sales records
+    }
+
+    // Default deny for any other path not explicitly matched
+    // match /{document=**} {
+    //  allow read, write: if false;
+    // }
+    // Note: The above default deny is good practice, but for now, to avoid breaking anything unexpected
+    // during development if other collections are used without explicit rules,
+    // we can keep the temporary broad rule for paths not matched above.
+    // THIS SHOULD BE REPLACED with explicit rules or a default deny in production.
+     match /{document=**} {
+       allow read, write: if request.time < timestamp.date(2025, 5, 1); // Extended temporary rule
+     }
   }
 }

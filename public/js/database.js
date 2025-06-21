@@ -91,11 +91,12 @@ class DatabaseService {
     /**
      * Busca un producto en Firestore por su código de barras.
      * @param {string} barcode - Código de barras del producto.
+     * @param {string} collectionNameOverride - Nombre de la colección para buscar (opcional).
      * @returns {Promise<Object|null>} - Datos del producto encontrado o `null` si no existe.
      */
-    async getProductByBarcode(barcode) {
+    async getProductByBarcode(barcode, collectionNameOverride = null) {
         try {
-            const collectionName = getFirestoreCollectionPath();
+            const collectionName = collectionNameOverride || getFirestoreCollectionPath();
             if (!barcode) throw new Error("Código de barras no proporcionado");
             const q = query(collection(db, collectionName), where('barcode', '==', barcode));
             const querySnapshot = await getDocs(q);

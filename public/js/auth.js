@@ -62,23 +62,88 @@ function getRedirectPageByEmail(email) {
 export function setupAuthStateListener(callbacks) {
     onAuthStateChanged(auth, (user) => {
         console.log("🔹 Estado de autenticación:", user ? `Usuario: ${user.email}` : "No hay usuario");
-        
-        // Ejecutar callbacks específicos según la página
+        const currentPage = window.location.pathname.split("/").pop(); // Obtener el nombre del archivo HTML actual
+
         if (user) {
+            const userEmail = user.email.toLowerCase();
+            const isAdmin = userEmail === 'jalcuza_58@hotmail.com';
+            let expectedPage = getRedirectPageByEmail(userEmail);
+
+            // Si el usuario es admin, puede estar en admin.html o en las páginas que puede ver
+            if (isAdmin) {
+                const allowedAdminPages = ['admin.html', 'index.html', 'tecnico.html', 'gamer.html'];
+                if (!allowedAdminPages.includes(currentPage)) {
+                    // Si el admin está en una página no permitida (ej. login.html), redirigir a admin.html
+                    console.log(`🚀 Admin ${userEmail} en página incorrecta ${currentPage}, redirigiendo a admin.html`);
+                    window.location.href = 'admin.html';
+                    return;
+                }
+            } else {
+                // Para usuarios no administradores
+                if (currentPage !== expectedPage) {
+                    // Si está en login.html, redirigir a su página esperada
+                    if (currentPage === "login.html") {
+                        console.log(`🚀 Usuario ${userEmail} autenticado, redirigiendo de login.html a ${expectedPage}`);
+                        window.location.href = expectedPage;
+                        return;
+                    } else {
+                        // Si está en cualquier otra página que no es la suya, redirigir a su página esperada
+                        console.log(`🔒 Acceso denegado para ${userEmail} a ${currentPage}. Redirigiendo a ${expectedPage}`);
+                        window.location.href = expectedPage;
+                        return;
+                    }
+                }
+            }
+
             if (callbacks?.onLogin) callbacks.onLogin(user);
-            
-            // Redirigir según el email del usuario, solo cuando está en la página de login
-            if (window.location.pathname.includes("login.html")) {
-                const redirectPage = getRedirectPageByEmail(user.email);
-                console.log(`🚀 Redirigiendo a usuario ${user.email} a ${redirectPage}`);
-                window.location.href = redirectPage;
-            }
+
         } else {
+            // No hay usuario autenticado
             if (callbacks?.onLogout) callbacks.onLogout();
-            // Redirigir según sea necesario
-            if (!window.location.pathname.includes("login.html")) {
+
+            // Redirigir a login.html si no está ya en ella o en la página de registro (si existe)
+            // Permitir estar en login.html sin usuario
+            const allowedUnauthenticatedPages = ["login.html", "register.html"]; // Asumiendo que register.html es una página de registro
+            if (!allowedUnauthenticatedPages.includes(currentPage)) {
+                console.log(`👤 Usuario no autenticado intentando acceder a ${currentPage}. Redirigiendo a login.html`);
                 window.location.href = "login.html";
+                return;
             }
+        }
+        // Aplicar clase temática al body
+        let themeClass = 'theme-default'; // Clase por defecto
+        if (user) {
+            const userEmail = user.email.toLowerCase();
+            const isAdmin = userEmail === 'jalcuza_58@hotmail.com';
+
+            if (isAdmin) {
+                themeClass = 'theme-admin';
+            } else if (userEmail === 'local52@tecnologyjc.com' && (currentPage === 'index.html' || currentPage === '')) {
+                themeClass = 'theme-local';
+            } else if (userEmail === 'laboratorio@tecnologyjc.com' && currentPage === 'tecnico.html') {
+                themeClass = 'theme-tecnico';
+            } else if (userEmail === 'gamer@tecnologyjc.com' && currentPage === 'gamer.html') {
+                themeClass = 'theme-gamer';
+            } else {
+                // Si es un usuario conocido pero está en una página inesperada (aunque la redirección debería manejar esto)
+                // o es un usuario no específicamente temado, aplicar un tema por defecto o el de 'local'.
+                // La redirección ya debería haberlo puesto en su página correcta.
+                // Si está en una página que no es login y no es su página principal, la redirección lo moverá.
+                // Si está en login.html, no se aplica tema de rol aún.
+                 if (currentPage !== "login.html" && currentPage !== "register.html") {
+                    // Aplicar tema basado en su página esperada si no es admin
+                     const expectedPage = getRedirectPageByEmail(userEmail);
+                     if (expectedPage === 'index.html') themeClass = 'theme-local';
+                     else if (expectedPage === 'tecnico.html') themeClass = 'theme-tecnico';
+                     else if (expectedPage === 'gamer.html') themeClass = 'theme-gamer';
+                 }
+            }
+        }
+
+        // Limpiar clases de tema anteriores y añadir la nueva
+        document.body.classList.remove('theme-local', 'theme-tecnico', 'theme-gamer', 'theme-admin', 'theme-default');
+        if (currentPage !== "login.html" && currentPage !== "register.html") { // No aplicar temas a login/register
+            document.body.classList.add(themeClass);
         }
         
         // Actualizar UI según corresponda
