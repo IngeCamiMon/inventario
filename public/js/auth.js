@@ -110,6 +110,41 @@ export function setupAuthStateListener(callbacks) {
                 return;
             }
         }
+        // Aplicar clase temática al body
+        let themeClass = 'theme-default'; // Clase por defecto
+        if (user) {
+            const userEmail = user.email.toLowerCase();
+            const isAdmin = userEmail === 'jalcuza_58@hotmail.com';
+
+            if (isAdmin) {
+                themeClass = 'theme-admin';
+            } else if (userEmail === 'local52@tecnologyjc.com' && (currentPage === 'index.html' || currentPage === '')) {
+                themeClass = 'theme-local';
+            } else if (userEmail === 'laboratorio@tecnologyjc.com' && currentPage === 'tecnico.html') {
+                themeClass = 'theme-tecnico';
+            } else if (userEmail === 'gamer@tecnologyjc.com' && currentPage === 'gamer.html') {
+                themeClass = 'theme-gamer';
+            } else {
+                // Si es un usuario conocido pero está en una página inesperada (aunque la redirección debería manejar esto)
+                // o es un usuario no específicamente temado, aplicar un tema por defecto o el de 'local'.
+                // La redirección ya debería haberlo puesto en su página correcta.
+                // Si está en una página que no es login y no es su página principal, la redirección lo moverá.
+                // Si está en login.html, no se aplica tema de rol aún.
+                 if (currentPage !== "login.html" && currentPage !== "register.html") {
+                    // Aplicar tema basado en su página esperada si no es admin
+                     const expectedPage = getRedirectPageByEmail(userEmail);
+                     if (expectedPage === 'index.html') themeClass = 'theme-local';
+                     else if (expectedPage === 'tecnico.html') themeClass = 'theme-tecnico';
+                     else if (expectedPage === 'gamer.html') themeClass = 'theme-gamer';
+                 }
+            }
+        }
+
+        // Limpiar clases de tema anteriores y añadir la nueva
+        document.body.classList.remove('theme-local', 'theme-tecnico', 'theme-gamer', 'theme-admin', 'theme-default');
+        if (currentPage !== "login.html" && currentPage !== "register.html") { // No aplicar temas a login/register
+            document.body.classList.add(themeClass);
+        }
         
         // Actualizar UI según corresponda
         updateAuthUI(user);

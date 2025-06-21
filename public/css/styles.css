@@ -417,3 +417,82 @@
           flex: 100%;
         }
       }
+
+      /* Theme Styles */
+      /* Default Theme (Fallback) */
+      .theme-default .header { background-color: #555; /* Gris oscuro por defecto */ }
+      .theme-default .action-button,
+      .theme-default #productForm button,
+      .theme-default .reports-section button,
+      .theme-default #logoutBtn { background-color: #777; }
+      .theme-default #salesForm button { background-color: #999; }
+
+
+      /* Local Theme (Azul) */
+      .theme-local .header { background-color: #3498db; }
+      .theme-local .action-button.action-sales,
+      .theme-local #salesForm button { background-color: #c0392b; border-color: #e74c3c; } /* Mantener rojo para ventas si es distintivo */
+      .theme-local .action-button.action-sales:hover,
+      .theme-local #salesForm button:hover { background-color: #a5281b; }
+      .theme-local #productForm button,
+      .theme-local .reports-section button,
+      .theme-local #logoutBtn,
+      .theme-local .edit-btn, .theme-local .delete-btn, /* Modificado */
+      .theme-local #toggleProductForm,
+      .theme-local .action-button:not(.action-sales) { background-color: #2980b9; border-color: #3498db; }
+      .theme-local #productForm button:hover,
+      .theme-local .reports-section button:hover,
+      .theme-local #logoutBtn:hover,
+      .theme-local .edit-btn:hover, .theme-local .delete-btn:hover, /* Modificado */
+      .theme-local #toggleProductForm:hover,
+      .theme-local .action-button:not(.action-sales):hover { background-color: #1f618d; }
+      .theme-local .header h1, .theme-local #userEmail { color: #fff; } /* Texto blanco para mejor contraste en header azul */
+      .theme-local .product-registration-header h2, .theme-local .inventory-header h2 { color: #2980b9; }
+
+
+      /* Técnico Theme (Naranja) */
+      .theme-tecnico .header { background-color: #e67e22; }
+      .theme-tecnico .action-button.action-sales,
+      .theme-tecnico #salesForm button { background-color: #c0392b; border-color: #e74c3c; } /* Mantener rojo para ventas */
+      .theme-tecnico .action-button.action-sales:hover,
+      .theme-tecnico #salesForm button:hover { background-color: #a5281b; }
+      .theme-tecnico #productForm button,
+      .theme-tecnico .reports-section button,
+      .theme-tecnico #logoutBtn,
+      .theme-tecnico .edit-btn, .theme-tecnico .delete-btn, /* Modificado */
+      .theme-tecnico #toggleProductForm,
+      .theme-tecnico .action-button:not(.action-sales) { background-color: #d35400; border-color: #e67e22;}
+      .theme-tecnico #productForm button:hover,
+      .theme-tecnico .reports-section button:hover,
+      .theme-tecnico #logoutBtn:hover,
+      .theme-tecnico .edit-btn:hover, .theme-tecnico .delete-btn:hover, /* Modificado */
+      .theme-tecnico #toggleProductForm:hover,
+      .theme-tecnico .action-button:not(.action-sales):hover { background-color: #b04300; }
+      .theme-tecnico .header h1, .theme-tecnico #userEmail { color: #fff; }
+      .theme-tecnico .product-registration-header h2, .theme-tecnico .inventory-header h2 { color: #d35400; }
+
+      /* Admin Theme (Gris Oscuro) */
+      .theme-admin .header { background-color: #34495e; }
+      .theme-admin .action-button.action-sales,
+      .theme-admin #salesForm button { background-color: #c0392b; border-color: #e74c3c; } /* Mantener rojo para ventas */
+      .theme-admin .action-button.action-sales:hover,
+      .theme-admin #salesForm button:hover { background-color: #a5281b; }
+      .theme-admin #productForm button,
+      .theme-admin .reports-section button,
+      .theme-admin #logoutBtn,
+      .theme-admin .edit-btn, .theme-admin .delete-btn, /* Modificado */
+      .theme-admin #toggleProductForm,
+      .theme-admin .action-button:not(.action-sales) { background-color: #2c3e50; border-color: #34495e;}
+      .theme-admin #productForm button:hover,
+      .theme-admin .reports-section button:hover,
+      .theme-admin #logoutBtn:hover,
+      .theme-admin .edit-btn:hover, .theme-admin .delete-btn:hover, /* Modificado */
+      .theme-admin #toggleProductForm:hover,
+      .theme-admin .action-button:not(.action-sales):hover { background-color: #1a252f; }
+      .theme-admin .header h1, .theme-admin #userEmail { color: #ecf0f1; }
+      .theme-admin .product-registration-header h2, .theme-admin .inventory-header h2 { color: #2c3e50; }
+      /* Específico para admin.html si es necesario, ej. los links de dashboard */
+      .theme-admin .dashboard-card a { background-color: #2c3e50; }
+      .theme-admin .dashboard-card a:hover { background-color: #1a252f; }
+      .theme-admin .logout-btn { background-color: #c0392b; } /* logout en admin.html */
+      .theme-admin .logout-btn:hover { background-color: #a5281b; }

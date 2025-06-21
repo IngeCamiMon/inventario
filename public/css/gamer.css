@@ -418,3 +418,35 @@ td {
     flex: 100%;
   }
 }
+
+/* Theme Styles for Gamer (Verde Lima) */
+/* Estos estilos se aplicarán si auth.js añade la clase .theme-gamer al body */
+/* Si gamer.css ya define estos colores en :root o directamente, podrían necesitar ajuste o ser redundantes */
+
+.theme-gamer .header { background-color: #2ecc71; }
+.theme-gamer .action-button.action-sales,
+.theme-gamer #salesForm button { background-color: var(--accent-color); border-color: var(--success-color); } /* Usar variables de gamer.css si son diferentes */
+.theme-gamer .action-button.action-sales:hover,
+.theme-gamer #salesForm button:hover { background-color: #219150; } /* Un hover más oscuro para el verde */
+
+.theme-gamer #productForm button,
+.theme-gamer #generateInventoryReport, /* Específico para gamer.html */
+.theme-gamer #generateSalesReport, /* Específico para gamer.html */
+.theme-gamer #generateHistoricalReport, /* Específico para gamer.html */
+.theme-gamer #logoutBtn,
+.theme-gamer .edit-btn, .theme-gamer .delete-btn, /* Modificado */
+.theme-gamer #toggleProductForm,
+.theme-gamer .action-button:not(.action-sales) { background-color: #27ae60; border-color: #2ecc71; }
+
+.theme-gamer #productForm button:hover,
+.theme-gamer #generateInventoryReport:hover, /* Específico para gamer.html */
+.theme-gamer #generateSalesReport:hover, /* Específico para gamer.html */
+.theme-gamer #generateHistoricalReport:hover, /* Específico para gamer.html */
+.theme-gamer #logoutBtn:hover,
+.theme-gamer .edit-btn:hover, .theme-gamer .delete-btn:hover, /* Modificado */
+.theme-gamer #toggleProductForm:hover,
+.theme-gamer .action-button:not(.action-sales):hover { background-color: #1e8449; }
+
+.theme-gamer .header h1, .theme-gamer #userEmail { color: #fff; } /* Texto blanco para mejor contraste */
+.theme-gamer .product-registration-header h2, .theme-gamer .inventory-header h2 { color: #27ae60; }
+.theme-gamer th { background-color: #d0f0c0; color: #27ae60; } /* Cabecera de tabla temática gamer */
